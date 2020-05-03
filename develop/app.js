@@ -71,11 +71,11 @@ generateTeam()
     // informs user of successful setting of Manager ID:
     console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
 
-    
-    populateTeam()
 
+    populateTeam()
     .then(function(inquiry) {
       console.log(`Great! Your first team member's name is ${inquiry.continue}.`);
+      console.log(`TO SUM UP:\nManager name: ${inquiry.managerName}\nManager ID: ${inquiry.managerID}\nManager email: ${inquiry.managerEmail}\nManager phone number: ${inquiry.managerOfficeNum}\nEmployee name: ${inquiry.continue}`);
     });
   });
 // Write code to use inquirer to gather information about the development team members,
