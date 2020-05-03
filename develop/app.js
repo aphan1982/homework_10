@@ -11,6 +11,15 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 const render = require("./lib/htmlRenderer");
 
 function generateTeam() {
+  // validation functions:
+  const numTester = async (input) => {
+    if (isNaN(input) || input.length < 10) {
+      return "Please enter a valid, 10-digit phone number";
+    } else {
+      managerOfficeNum = `(${input[0-2]})${input[3-5]}-${input[6-9]}`;
+      return true;
+    };
+  };
   return inquirer.prompt([
     {
       type: "input",
@@ -30,14 +39,16 @@ function generateTeam() {
     {
       type: "input",
       name: "managerOfficeNum",
-      message: "What is your office phone number?"
+      message: "What is your office phone number?",
+      validate: numTester
     }
   ]);
 };
 
 generateTeam()
   .then(function(inquiry) {
-    console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
+    const formattedOfficeNum = `(${inquiry.managerOfficeNum.slice(0, 3).concat()}) ${inquiry.managerOfficeNum.slice(3, 6).concat()}-${inquiry.managerOfficeNum.slice(6).concat()}`;
+    console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${formattedOfficeNum}.`);
   });
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
