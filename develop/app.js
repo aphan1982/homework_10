@@ -14,15 +14,30 @@ function generateTeam() {
   return inquirer.prompt([
     {
       type: "input",
-      name: "name",
-      message: "Please enter your name."
+      name: "managerName",
+      message: "Hey there, manager! Please enter your name to begin."
+    },
+    {
+      type: "input",
+      name: "managerID",
+      message: "Please enter your ID."
+    },
+    {
+      type: "input",
+      name: "managerEmail",
+      message: "Please enter your e-mail address."
+    },
+    {
+      type: "input",
+      name: "managerOfficeNum",
+      message: "What is your office phone number?"
     }
   ]);
 };
 
 generateTeam()
-  .then(function(answers) {
-    console.log(`Success! You've created an entry for ${answers.name}!`);
+  .then(function(inquiry) {
+    console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
   });
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
