@@ -12,7 +12,14 @@ const render = require("./lib/htmlRenderer");
 
 function generateTeam() {
   // validation functions:
-  const numTester = async (inquiry) => {
+  const emailTest = async (inquiry) => {
+    if (!inquiry.includes("@") || !inquiry.includes(".")) {
+      return "Please enter a valid e-mail address";
+    } else {
+      return true;
+    };
+  };
+  const phoneNumTest = async (inquiry) => {
     if (isNaN(inquiry) || inquiry.length !== 10) {
       return "Please enter a valid, 10-digit phone number";
     } else {
@@ -34,13 +41,14 @@ function generateTeam() {
     {
       type: "input",
       name: "managerEmail",
-      message: "Please enter your e-mail address."
+      message: "Please enter your e-mail address.",
+      validate: emailTest
     },
     {
       type: "input",
       name: "managerOfficeNum",
       message: "What is your office phone number?",
-      validate: numTester
+      validate: phoneNumTest
     }
   ]);
 };
