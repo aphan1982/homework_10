@@ -53,10 +53,30 @@ function generateTeam() {
   ]);
 };
 
+function populateTeam() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "continue",
+      message: "Alright, let's start with your team. Enter the next name."
+    }
+  ]);
+};
+
 generateTeam()
   .then(function(inquiry) {
+    // parses Manager's office number in telephone format:
     inquiry.managerOfficeNum = `(${inquiry.managerOfficeNum.slice(0, 3).concat()}) ${inquiry.managerOfficeNum.slice(3, 6).concat()}-${inquiry.managerOfficeNum.slice(6).concat()}`;
+
+    // informs user of successful setting of Manager ID:
     console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
+
+    
+    populateTeam()
+
+    .then(function(inquiry) {
+      console.log(`Great! Your first team member's name is ${inquiry.continue}.`);
+    });
   });
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
