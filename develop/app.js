@@ -80,13 +80,11 @@ generateTeam()
     employees.push(managerResult);
     
     console.log(employees);
-
-    console.log(render(employees));
     
-    const managerForename = isolateFirstName(inquiry.managerName);
+    const managerForename = isolateFirstName(managerResult.name);
 
     // informs user of successful setting of Manager ID:
-    console.log(`Success! I've generated your profile, ${managerForename}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
+    console.log(`Success! I've generated your profile, ${managerForename}! I have your ID as ${managerResult.id}, your e-mail address as ${managerResult.email}, and your office number as ${managerResult.officeNumber}.`);
 
 
     populateTeam()
