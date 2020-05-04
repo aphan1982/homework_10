@@ -18,15 +18,15 @@ function isolateFirstName(string) {
 function generateTeam() {
   // validation functions:
   const emailTest = async (inquiry) => {
-    if (!inquiry.includes("@") || !inquiry.includes(".")) {
-      return "Please enter a valid e-mail address";
+    if (!inquiry.includes("@") || !inquiry.includes(".") || inquiry.includes(" ")) {
+      return "Please enter a valid e-mail address.";
     } else {
       return true;
     };
   };
   const phoneNumTest = async (inquiry) => {
     if (isNaN(inquiry) || inquiry.length !== 10) {
-      return "Please enter a valid, 10-digit phone number";
+      return "Please enter a valid, 10-digit phone number.";
     } else {
       return true;
     };
@@ -36,17 +36,17 @@ function generateTeam() {
     {
       type: "input",
       name: "managerName",
-      message: "Hey there, manager! Please enter your name to begin."
+      message: "Hey there, manager! Please enter your name to begin:"
     },
     {
       type: "input",
       name: "managerID",
-      message: "Please enter your ID."
+      message: "Please enter your ID:"
     },
     {
       type: "input",
       name: "managerEmail",
-      message: "Please enter your e-mail address.",
+      message: "Please enter your e-mail address:",
       validate: emailTest
     },
     {
@@ -70,20 +70,19 @@ function populateTeam() {
 
 generateTeam()
   .then(inquiry => {
+    // array to hold employee objects:
     const employees = [];
 
-    // parses Manager's office number in telephone format:
+    // parses Manager's office number into telephone format:
     inquiry.managerOfficeNum = `(${inquiry.managerOfficeNum.slice(0, 3).concat()}) ${inquiry.managerOfficeNum.slice(3, 6).concat()}-${inquiry.managerOfficeNum.slice(6).concat()}`;
 
+    // creates new Manager object and pushes it into employees[]:
     const managerResult = new Manager(inquiry.managerName, inquiry.managerID, inquiry.managerEmail, inquiry.managerOfficeNum);
 
     employees.push(managerResult);
     
-    console.log(employees);
-    
+    // Addresses the user by given first name and informs of successful setting of Manager ID:
     const managerForename = isolateFirstName(managerResult.name);
-
-    // informs user of successful setting of Manager ID:
     console.log(`Success! I've generated your profile, ${managerForename}! I have your ID as ${managerResult.id}, your e-mail address as ${managerResult.email}, and your office number as ${managerResult.officeNumber}.`);
 
 
