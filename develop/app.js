@@ -137,69 +137,76 @@ function populateTeam() {
   ]);
 };
 
+const employees = [];
 // CALLS CLI PROMPT:
-generateTeam()
+generateTeam(employees)
   .then(inquiry => {
     // array to hold employee objects:
-    const employees = [];
 
     // parses Manager's office number into telephone format:
     inquiry.managerOfficeNum = `(${inquiry.managerOfficeNum.slice(0, 3).concat()}) ${inquiry.managerOfficeNum.slice(3, 6).concat()}-${inquiry.managerOfficeNum.slice(6).concat()}`;
 
-    // creates new Manager object and pushes it into employees[]:
+    // creates new manager object and pushes manager object into employees[]:
     const managerResult = new Manager(inquiry.managerName, inquiry.managerID, inquiry.managerEmail, inquiry.managerOfficeNum);
-
     employees.push(managerResult);
     
-    // Addresses the user by given first name and confirms the setting of Manager ID (the numbers and symbols in the console.log() sets the color of the terminal text):
+    // addresses manager by given first name and confirms the setting of Manager ID (the numbers and symbols in the console.log() sets the color of the terminal text):
     const managerForename = isolateFirstName(managerResult.name);
-
     console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[35m%s\x1b[0m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id},`, `\nyour e-mail address as `, `${managerResult.email},`, `\nand your office number as `, `${managerResult.officeNumber}.\n`, `\nNow let's get to your team.\n`);
-
-    // Adds new employees to the team, determining if they are engineers or interns:
-    do populateTeam()
+    
+    let engineerResult = "";
+    do {
+    populateTeam()
       .then(inquiry => {
+        // determines if entry is an engineer or intern:
         if (inquiry.employeeRole === "Engineer") {
           // creates engineer entry, gathers GitHub user name, and pushes into employees[]:
           const engineerResult = new Engineer(inquiry.employeeName, inquiry.employeeID, inquiry.employeeEmail);
-
+  
           getEngineerGitHub()
             .then(inquiry => {
               engineerResult.github = inquiry.getEngineerGitHub;
               employees.push(engineerResult);
-
+  
               console.log(`\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m`,`\nSuccess! `, `I've registered `, `${engineerResult.name}'s `, `information.\n`);
-          })
-          .catch(error => console.log(error));
+            })
         } else {
           // creates intern entry, gathers school information, and pushes into employees[]:
           const internResult = new Intern(inquiry.employeeName, inquiry.employeeID, inquiry.employeeEmail);
-
+  
           getInternSchool()
             .then(inquiry => {
               internResult.school = inquiry.internSchool;
               employees.push(internResult);
-
+  
               console.log(`\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m`,`\nSuccess! `, `I've registered `, `${internResult.name}'s `, `information.\n`);
+              
+              // addEntries()
+              //     .then(inquiry => {
+              //       if (inquiry.moreEntries) {
+              //         console.log(`Okay`);
+              //       } else {
+              //         console.log(employees);
+              //       }
+              //     })
             })
-            .catch(error => console.log(error));
         }
-          
-        addEntries()
-          .then(inquiry => {
-            if (inquiry.moreEntries) {
-              console.log(`Okay`);
-            } else {
-              console.log(`Not okay`);
-            }
-          })
-          .catch(error => console.log(error));
-          
       })
-      .catch(error => console.log(error));
-      while (inquiry.moreEntries);
-    })
-    .catch(error => console.log(error));
+    } while (!engineerResult.name === "Bubba");
+
+    }).catch(error => console.log(error));
+    
+    
+
+  // })
+
+    
+
+
+          
+      // while (inquiry.moreEntries);
+    // })
+    // .catch(error => console.log(error));
 // });
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
