@@ -61,9 +61,10 @@ function generateTeam() {
 function populateTeam() {
   return inquirer.prompt([
     {
-      type: "input",
+      type: "list",
       name: "continue",
-      message: "Alright, let's start with your team. Enter the next name."
+      message: "What role does your next employee have?",
+      choices: [ "Engineer", "Intern" ]
     }
   ]);
 };
@@ -81,9 +82,9 @@ generateTeam()
 
     employees.push(managerResult);
     
-    // Addresses the user by given first name and informs of successful setting of Manager ID:
+    // Addresses the user by given first name and informs of successful setting of Manager ID (the numbers and symbols in the console.log() sets the color of the terminal text):
     const managerForename = isolateFirstName(managerResult.name);
-    console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id}, `, `your e-mail address as `, `${managerResult.email}, `, `and your office number as `, `${managerResult.officeNumber}.\n`);
+    console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[35m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id},`, `\nyour e-mail address as `, `${managerResult.email},`, `\nand your office number as `, `${managerResult.officeNumber}.\n`, `\nNow let's get to your team.\n`);
 
 
     populateTeam()
