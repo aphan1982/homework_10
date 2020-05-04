@@ -10,6 +10,11 @@ const outputPath = path.join(OUTPUT_DIR, "team.html");
 
 const render = require("./lib/htmlRenderer");
 
+function isolateFirstName(string) {
+  const spaceIndex = string.indexOf(" ");
+  return string.slice(0, spaceIndex).concat();
+};
+
 function generateTeam() {
   // validation functions:
   const emailTest = async (inquiry) => {
@@ -64,20 +69,34 @@ function populateTeam() {
 };
 
 generateTeam()
-  .then(function(inquiry) {
+  .then(inquiry => {
+    const employees = [];
+
     // parses Manager's office number in telephone format:
     inquiry.managerOfficeNum = `(${inquiry.managerOfficeNum.slice(0, 3).concat()}) ${inquiry.managerOfficeNum.slice(3, 6).concat()}-${inquiry.managerOfficeNum.slice(6).concat()}`;
 
+    const managerResult = new Manager(inquiry.managerName, inquiry.managerID, inquiry.managerEmail, inquiry.managerOfficeNum);
+
+    employees.push(managerResult);
+    
+    console.log(employees);
+
+    console.log(render(employees));
+    
+    const managerForename = isolateFirstName(inquiry.managerName);
+
     // informs user of successful setting of Manager ID:
-    console.log(`Success! You've created an entry for ${inquiry.managerName}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
+    console.log(`Success! I've generated your profile, ${managerForename}! I have your ID as ${inquiry.managerID}, your e-mail address as ${inquiry.managerEmail}, and your office number as ${inquiry.managerOfficeNum}.`);
 
 
     populateTeam()
-    .then(function(inquiry) {
+    .then(inquiry => {
       console.log(`Great! Your first team member's name is ${inquiry.continue}.`);
       console.log(`TO SUM UP:\nManager name: ${inquiry.managerName}\nManager ID: ${inquiry.managerID}\nManager email: ${inquiry.managerEmail}\nManager phone number: ${inquiry.managerOfficeNum}\nEmployee name: ${inquiry.continue}`);
     });
-  });
+  })
+  .catch(error => console.log(error));
+// });
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
