@@ -16,44 +16,74 @@ function isolateFirstName(string) {
 };
 
 // validation functions:
-const emailTest = async (inquiry) => {
+const blankValidate = async inquiry => {
+  return (!inquiry ? "Please make a valid entry." : true);
+}
+
+const emailValidate = async inquiry => {
   if (!inquiry.includes("@") || !inquiry.includes(".") || inquiry.includes(" ")) {
     return "Please enter a valid e-mail address.";
   } else {
     return true;
   };
 };
-const phoneNumTest = async (inquiry) => {
+
+const phoneNumValidate = async inquiry => {
   if (isNaN(inquiry) || inquiry.length !== 10) {
     return "Please enter a valid, 10-digit phone number.";
   } else {
     return true;
   };
 };
+
 function generateTeam() {
   // Inquirer.js prompt:
   return inquirer.prompt([
     {
       type: "input",
       name: "managerName",
-      message: "Hey there, manager! Please enter your name to begin:"
+      message: "Hey there, manager! Please enter your name to begin:",
+      validate: blankValidate
     },
     {
       type: "input",
       name: "managerID",
-      message: "Please enter your ID:"
+      message: "Please enter your ID:",
+      validate: blankValidate
     },
     {
       type: "input",
       name: "managerEmail",
       message: "Please enter your e-mail address:",
-      validate: emailTest
+      validate: emailValidate
     },
     {
       type: "input",
       name: "managerOfficeNum",
       message: "What is your office phone number?",
-      validate: phoneNumTest
+      validate: phoneNumValidate
+    }
+  ]);
+};
+
+function getEngineerGitHub() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "engineerGitHub",
+      message: "What is this engineer's GitHub username?",
+      validate: blankValidate
+    }
+  ]);
+};
+
+function getInternSchool() {
+  return inquirer.prompt([
+    {
+      type: "input",
+      name: "internSchool",
+      message: "What school is this intern attending?",
+      validate: blankValidate
     }
   ]);
 };
@@ -62,9 +92,27 @@ function populateTeam() {
   return inquirer.prompt([
     {
       type: "list",
-      name: "continue",
+      name: "employeeRole",
       message: "What role does your next employee have?",
       choices: [ "Engineer", "Intern" ]
+    },
+    {
+      type: "input",
+      name: "employeeName",
+      message: "What's this employee's name?",
+      validate: blankValidate
+    },
+    {
+      type: "input",
+      name: "employeeID",
+      message: "What's this employee's ID?",
+      validate: blankValidate
+    },
+    {
+      type: "input",
+      name: "employeeEmail",
+      message: "What is this employee's e-mail address?",
+      validate: emailValidate
     }
   ]);
 };
@@ -82,15 +130,20 @@ generateTeam()
 
     employees.push(managerResult);
     
-    // Addresses the user by given first name and informs of successful setting of Manager ID (the numbers and symbols in the console.log() sets the color of the terminal text):
+    // Addresses the user by given first name and confirms the setting of Manager ID (the numbers and symbols in the console.log() sets the color of the terminal text):
     const managerForename = isolateFirstName(managerResult.name);
-    console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[35m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id},`, `\nyour e-mail address as `, `${managerResult.email},`, `\nand your office number as `, `${managerResult.officeNumber}.\n`, `\nNow let's get to your team.\n`);
+    console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[35m%s\x1b[0m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id},`, `\nyour e-mail address as `, `${managerResult.email},`, `\nand your office number as `, `${managerResult.officeNumber}.\n`, `\nNow let's get to your team.\n`);
 
-
+    // Adds new employees to the team:
     populateTeam()
     .then(inquiry => {
-      console.log(`Great! Your first team member's name is ${inquiry.continue}.`);
-      console.log(`TO SUM UP:\nManager name: ${inquiry.managerName}\nManager ID: ${inquiry.managerID}\nManager email: ${inquiry.managerEmail}\nManager phone number: ${inquiry.managerOfficeNum}\nEmployee name: ${inquiry.continue}`);
+      if (inquiry.employeeRole === "Engineer") {
+        const engineerResult = new Engineer(inquiry.employeeName, inquiry.employeeID, inquiry.employeeEmail);
+        getEngineerGitHub()
+        .then(inquiry => {
+          engineerResult.github = inquiry.engineerGitHub;
+        })
+      }
     });
   })
   .catch(error => console.log(error));
