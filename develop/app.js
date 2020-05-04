@@ -15,22 +15,22 @@ function isolateFirstName(string) {
   return string.slice(0, spaceIndex).concat();
 };
 
+// validation functions:
+const emailTest = async (inquiry) => {
+  if (!inquiry.includes("@") || !inquiry.includes(".") || inquiry.includes(" ")) {
+    return "Please enter a valid e-mail address.";
+  } else {
+    return true;
+  };
+};
+const phoneNumTest = async (inquiry) => {
+  if (isNaN(inquiry) || inquiry.length !== 10) {
+    return "Please enter a valid, 10-digit phone number.";
+  } else {
+    return true;
+  };
+};
 function generateTeam() {
-  // validation functions:
-  const emailTest = async (inquiry) => {
-    if (!inquiry.includes("@") || !inquiry.includes(".") || inquiry.includes(" ")) {
-      return "Please enter a valid e-mail address.";
-    } else {
-      return true;
-    };
-  };
-  const phoneNumTest = async (inquiry) => {
-    if (isNaN(inquiry) || inquiry.length !== 10) {
-      return "Please enter a valid, 10-digit phone number.";
-    } else {
-      return true;
-    };
-  };
   // Inquirer.js prompt:
   return inquirer.prompt([
     {
@@ -83,7 +83,7 @@ generateTeam()
     
     // Addresses the user by given first name and informs of successful setting of Manager ID:
     const managerForename = isolateFirstName(managerResult.name);
-    console.log(`Success! I've generated your profile, ${managerForename}! I have your ID as ${managerResult.id}, your e-mail address as ${managerResult.email}, and your office number as ${managerResult.officeNumber}.`);
+    console.log(`\x1b[32m%s\x1b[0m%s\x1b[32m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m%s\x1b[33m%s\x1b[0m`, `\nSuccess! `, `I've generated your profile, `, `${managerForename}!`, `\nI have your ID as `, `${managerResult.id}, `, `your e-mail address as `, `${managerResult.email}, `, `and your office number as `, `${managerResult.officeNumber}.\n`);
 
 
     populateTeam()
